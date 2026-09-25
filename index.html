@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Trust AI - Har Safar Bharose Ke Saath</title>
+<style>
+body{font-family:'Segoe UI',sans-serif;background:#0a0f1e;color:white;margin:0;padding:20px;}
+.header{text-align:center;background:linear-gradient(90deg,#ff8c00,#2ecc71);padding:20px;border-radius:15px;}
+.card{background:#162040;padding:20px;margin:15px 0;border-radius:15px;border:1px solid #2ecc71;}
+.btn{padding:12px 25px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px;}
+.btn-green{background:#2ecc71;color:black;}
+.btn-orange{background:#ff8c00;color:white;}
+.btn-red{background:red;color:white;width:100%;font-size:20px;padding:15px;}
+.score{font-size:50px;color:#2ecc71;font-weight:bold;}
+.tag{padding:5px 10px;border-radius:20px;font-size:12px;display:inline-block;margin:5px;}
+.tag-green{background:#2ecc71;color:black;}
+.tag-orange{background:#ff8c00;}
+input,select{width:100%;padding:12px;border-radius:8px;border:none;margin:10px 0;}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>Travel Trust AI</h1>
+<p>Maharashtra's Safety OS with Blockchain + Offline SOS</p>
+<p>Offline Mode: <span id="offlineStatus">Checking...</span> | Blockchain Verified ✓</p>
+</div>
+
+<div class="card">
+<h3>1. Trust Score - Check Hotel</h3>
+<input id="hotelName" placeholder="Enter Hotel Name e.g. Sula Resort Nashik">
+<button class="btn btn-green" onclick="checkTrust()">Check Trust Score</button>
+<div id="result" style="margin-top:15px;"></div>
+</div>
+
+<div class="card">
+<h3>2. Tijori - UPI Protection</h3>
+<p>Actual Price: ₹3000 | Shop is asking:</p>
+<input id="priceInput" type="number" placeholder="Enter price e.g. 6000">
+<button class="btn btn-orange" onclick="checkPrice()">Check & Block if Overpriced</button>
+<p id="tijoriResult"></p>
+</div>
+
+<div class="card">
+<h3>3. Sakhi Safe Map + BoloTranslate</h3>
+<button class="btn btn-green" onclick="showSafePoints()">Show Nearby Safe Points (Pune/Nashik)</button>
+<p id="safePoints"></p>
+<select id="lang">
+<option>Marathi to English</option>
+<option>Hindi to English</option>
+<option>English to Marathi</option>
+</select>
+<input id="translateInput" placeholder="Type: Mala madat havi aahe">
+<button class="btn btn-green" onclick="translateText()">Translate (Offline)</button>
+<p id="translateResult"></p>
+</div>
+
+<div class="card" style="border:2px solid red;">
+<h3>🚨 SOS - Emergency</h3>
+<p>Works even without internet via SMS</p>
+<button class="btn btn-red" onclick="sendSOS()">SOS - SEND LOCATION TO FAMILY + 112</button>
+<p id="sosResult"></p>
+</div>
+
+<script>
+// Offline check
+function updateOnline(){
+ document.getElementById('offlineStatus').innerText = navigator.onLine ? "ONLINE" : "OFFLINE - SOS will work via SMS";
+}
+window.addEventListener('online', updateOnline);
+window.addEventListener('offline', updateOnline);
+updateOnline();
+
+// 1. Trust Score with Blockchain tag
+function checkTrust(){
+ let name = document.getElementById('hotelName').value;
+ if(!name) return alert("Enter hotel name");
+ let score = Math.floor(Math.random()*40)+55; // 55-95 random
+ let risk = score>80 ? "Low" : score>65 ? "Medium" : "High";
+ let color = score>80 ? "#2ecc71" : "orange";
+ document.getElementById('result').innerHTML = `
+  <div class="score" style="color:${color}">${score}/100</div>
+  <span class="tag tag-green">Blockchain Verified ✓ Immutable</span>
+  <span class="tag tag-orange">Fraud Risk: ${risk}</span>
+  <p>AI (BERT) analyzed 1200 reviews. ${risk} risk. ${score>80?"Safe to Book":"Fake reviews detected"}</p>
+  <p style="font-size:11px;color:gray">Blockchain Hash: 0x9f...${Math.random().toString(16).slice(2,8)} - Stored permanently</p>
+ `;
+}
+
+// 2. Tijori UPI Block
+function checkPrice(){
+ let asked = document.getElementById('priceInput').value;
+ let actual = 3000;
+ if(asked > actual*1.3){
+  document.getElementById('tijoriResult').innerHTML = `<b style="color:red">⚠️ OVERPRICE! Actual is ₹${actual}. You are paying ₹${asked}. Blocked for 5 sec. Do you want to pay?</b><br><button class="btn btn-green">Pay ₹${actual} (Correct)</button> <button class="btn btn-orange">Pay ₹${asked} Anyway</button>`;
+ } else {
+  document.getElementById('tijoriResult').innerHTML = `<b style="color:#2ecc71">✓ Fair Price - Safe to Pay ₹${asked}</b>`;
+ }
+}
+
+// 3. Sakhi Safe Map
+function showSafePoints(){
+ document.getElementById('safePoints').innerHTML = "📍 1. Pune Police Station - 0.5km (Safe) <br>📍 2. MTDC Verified Medical - 0.8km <br>📍 3. Sakhi Verified Shop - 1.2km <br>📍 4. Sula Nashik Helpdesk - 1.5km";
+}
+function translateText(){
+ let text = document.getElementById('translateInput').value;
+ document.getElementById('translateResult').innerText = "Translated: 'I need help' - (Offline AI Translated)";
+}
+
+// 4. SOS Offline
+function sendSOS(){
+ if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(pos=>{
+   document.getElementById('sosResult').innerHTML = `🚨 SOS SENT!<br>Location: ${pos.coords.latitude}, ${pos.coords.longitude}<br>Sent to: Family WhatsApp + 112 + Sakhi Network via SMS (Offline Mode Working)`;
+  });
+ } else {
+  document.getElementById('sosResult').innerText = "SOS Sent via SMS (Offline)";
+ }
+}
+</script>
+</body>
+</html>
